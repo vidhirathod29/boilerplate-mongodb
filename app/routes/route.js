@@ -1,10 +1,8 @@
-const express = require('express');
-const router = express.Router(); 
-const categoryRoute = require('./categoryRoute');
+const express = require("express");
+const router = express.Router();
+const categoryRoute = require("./categoryRoute");
+const route = require("./route");
 
-const route = require('./route');
+router.use("/category", categoryRoute);
 
-router.use('/category', categoryRoute);
-
-
-module.exports = router;  
+module.exports = router;
