@@ -60,7 +60,7 @@ const registration = async (req, res, next) => {
   } catch (err) {
     next(
       new GeneralResponse(
-        `${Messages.SOMETHING_WENT_WRONG}`,
+        Messages.SOMETHING_WENT_WRONG,
         undefined,
         StatusCodes.INTERNAL_SERVER_ERROR,
         RESPONSE_STATUS.ERROR,
@@ -77,7 +77,7 @@ const login = async (req, res, next) => {
       req.body.password,
       response.password,
     );
-    if (passwordCompare === true) {
+    if (passwordCompare) {
       const token = generateToken(req.body.email, req.body.password);
       next(
         new GeneralResponse(
@@ -112,10 +112,9 @@ const viewProfile = async (req, res, next) => {
   try {
     const email = req.user.email;
     const user = await authModel.findOne({ email: email });
+  
     if (user) {
-      res
-        .status(StatusCodes.OK)
-        .json(
+        next(
           new GeneralResponse(
             `Your Profile has been get ${Messages.SUCCESS}`,
             user,
