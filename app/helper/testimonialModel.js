@@ -6,6 +6,6 @@ var testimonial = new mongoose.Schema({
   testimonialDescription: { type: String },
   image: { type: String },
 });
-var testimonialmodel = mongoose.model('Testimonial', testimonial);
+var testimonialModel = mongoose.model('Testimonial', testimonial);
 
-module.exports = { testimonialmodel };
+module.exports = { testimonialModel };
