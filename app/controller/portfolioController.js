@@ -25,8 +25,8 @@ const addPortfolio = async (req, res, next) => {
         .json(
           new GeneralError(
             `${Messages.BAD_REQUEST}`,
-            error.message,
             StatusCodes.BAD_REQUEST,
+            error.message,
             RESPONSE_STATUS.ERROR,
           ),
         );
@@ -74,17 +74,37 @@ const addPortfolio = async (req, res, next) => {
     );
   }
 };
-
 const viewPortfolio = async (req, res, next) => {
   try {
-    const user = await portfolioModel.find();
-    if (user) {
+    const portfolioData = await portfolioModel.aggregate([
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'projectCategory',
+          foreignField: '_id',
+          as: 'categoryDetails',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          projectCategory: 1,
+          projectName: 1,
+          projectImage: 1,
+          projectTitle: 1,
+          date: 1,
+          projectDescription: 1,
+          categoryName: '$categoryDetails.categoryName',
+        },
+      },
+    ]);
+    if (portfolioData) {
       res
         .status(StatusCodes.OK)
         .json(
           new GeneralResponse(
             `Portfolio obtained ${Messages.SUCCESS}`,
-            user,
+            portfolioData,
             undefined,
             RESPONSE_STATUS.SUCCESS,
           ),
@@ -102,7 +122,7 @@ const viewPortfolio = async (req, res, next) => {
   } catch (error) {
     return next(
       new GeneralError(
-        Messages.SOMETHING_WENT_WRONG,
+        `${Messages.SOMETHING_WENT_WRONG} while obtaining portfolio`,
         StatusCodes.INTERNAL_SERVER_ERROR,
         undefined,
         RESPONSE_STATUS.ERROR,
