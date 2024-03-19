@@ -155,19 +155,6 @@ const updateCategory = async (req, res, next) => {
 const deleteCategory = async (req, res, next) => {
   try {
     const email = req.user.email;
-    const { error } = await validate.updateCategoryValidation(req.body);
-    if (error) {
-      return res
-        .status(400)
-        .json(
-          new GeneralError(
-            `${Messages.BAD_REQUEST}`,
-            error.message,
-            StatusCodes.BAD_REQUEST,
-            RESPONSE_STATUS.ERROR,
-          ),
-        );
-    }
     const category = await categoryModel.deleteOne(req.params.id);
     if (category) {
       res
