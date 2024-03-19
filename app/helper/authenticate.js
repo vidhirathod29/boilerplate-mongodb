@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const logger = require('../logger/logger');
 const { GeneralResponse } = require('../utils/response');
+const { GeneralError } = require('../utils/error');
 const StatusCodes = require('../services/Http-Status');
+const { Messages } = require('../utils/messages');
 const { RESPONSE_STATUS } = require('../utils/enum');
 
 const generateToken = (req, res) => {
@@ -16,6 +18,7 @@ const generateToken = (req, res) => {
   res.json({ token });
 };
 const authentication = (req, res, next) => {
+  try{
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -26,7 +29,7 @@ const authentication = (req, res, next) => {
         logger.error(err);
         next(
           new GeneralResponse(
-            'Token verification failed',
+            `${Messages.FAILED} to verify token`,
             undefined,
             StatusCodes.UNAUTHORIZED,
             RESPONSE_STATUS.ERROR,
@@ -38,15 +41,25 @@ const authentication = (req, res, next) => {
     });
   } else {
     next(
-      new GeneralResponse(
-        'Something went wrong',
-        undefined,
+      new GeneralError(
+        `Token  ${Messages.NOT_FOUND}`,
         StatusCodes.NOT_FOUND,
+        undefined,
         RESPONSE_STATUS.ERROR,
       ),
     );
   }
-};
+}catch (error) {
+  return next(
+    new GeneralError(
+      `${Messages.SOMETHING_WENT_WRONG} while generating token`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      undefined,
+      RESPONSE_STATUS.ERROR,
+    ),
+  );
+}
+}
 module.exports = {
   generateToken,
   authentication,
