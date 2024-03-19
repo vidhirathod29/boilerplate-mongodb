@@ -4,7 +4,6 @@ const { GeneralResponse } = require('../utils/response');
 const { GeneralError } = require('../utils/error');
 const { Messages } = require('../utils/messages');
 const { RESPONSE_STATUS } = require('../utils/enum');
-
 const validate = require('../validation/categoryValidation');
 const addCategory = async (req, res, next) => {
   try {
@@ -18,8 +17,8 @@ const addCategory = async (req, res, next) => {
         .json(
           new GeneralError(
             `${Messages.BAD_REQUEST}`,
-            error.message,
             StatusCodes.BAD_REQUEST,
+            error.message,
             RESPONSE_STATUS.SUCCESS,
           ),
         );
@@ -43,9 +42,9 @@ const addCategory = async (req, res, next) => {
     } else {
       next(
         new GeneralError(
-          `${Messages.FAILED} to add Category`,
-          undefined,
+          `${Messages.FAILED} to add category`,
           StatusCodes.BAD_REQUEST,
+          undefined,
           RESPONSE_STATUS.ERROR,
         ),
       );
@@ -53,9 +52,9 @@ const addCategory = async (req, res, next) => {
   } catch (error) {
     return next(
       new GeneralError(
-        `${Messages.SOMETHING_WENT_WRONG} while adding Category`,
-        undefined,
+        `${Messages.SOMETHING_WENT_WRONG} while adding category`,
         StatusCodes.INTERNAL_SERVER_ERROR,
+        undefined,
         RESPONSE_STATUS.ERROR,
       ),
     );
@@ -64,15 +63,15 @@ const addCategory = async (req, res, next) => {
 
 const viewCategory = async (req, res, next) => {
   try {
-    const user = await categoryModel.find();
+    const category = await categoryModel.find();
 
-    if (user) {
+    if (category) {
       res
         .status(StatusCodes.OK)
         .json(
           new GeneralResponse(
             `Categories get ${Messages.SUCCESS}`,
-            user,
+            category,
             undefined,
             RESPONSE_STATUS.SUCCESS,
           ),
@@ -81,8 +80,8 @@ const viewCategory = async (req, res, next) => {
       next(
         new GeneralError(
           `Category ${Messages.NOT_FOUND}`,
-          undefined,
           StatusCodes.NOT_FOUND,
+          undefined,
           RESPONSE_STATUS.ERROR,
         ),
       );
@@ -91,8 +90,8 @@ const viewCategory = async (req, res, next) => {
     return next(
       new GeneralError(
         Messages.SOMETHING_WENT_WRONG,
-        undefined,
         StatusCodes.INTERNAL_SERVER_ERROR,
+        undefined,
         RESPONSE_STATUS.ERROR,
       ),
     );
@@ -109,8 +108,8 @@ const updateCategory = async (req, res, next) => {
         .json(
           new GeneralError(
             `${Messages.BAD_REQUEST}`,
-            error.message,
             StatusCodes.BAD_REQUEST,
+            error.message,
             RESPONSE_STATUS.ERROR,
           ),
         );
@@ -134,9 +133,9 @@ const updateCategory = async (req, res, next) => {
     } else {
       next(
         new GeneralError(
-          `${Messages.FAILED} to update Category`,
-          undefined,
+          `${Messages.FAILED} to update category`,
           StatusCodes.BAD_REQUEST,
+          undefined,
           RESPONSE_STATUS.ERROR,
         ),
       );
@@ -144,9 +143,9 @@ const updateCategory = async (req, res, next) => {
   } catch (error) {
     return next(
       new GeneralError(
-        `${Messages.SOMETHING_WENT_WRONG} while updating Category`,
-        undefined,
+        `${Messages.SOMETHING_WENT_WRONG} while updating category`,
         StatusCodes.INTERNAL_SERVER_ERROR,
+        undefined,
         RESPONSE_STATUS.ERROR,
       ),
     );
@@ -185,8 +184,8 @@ const deleteCategory = async (req, res, next) => {
       next(
         new GeneralError(
           `Category ${Messages.NOT_FOUND}`,
-          undefined,
           StatusCodes.BAD_REQUEST,
+          undefined,
           RESPONSE_STATUS.ERROR,
         ),
       );
@@ -194,9 +193,9 @@ const deleteCategory = async (req, res, next) => {
   } catch (error) {
     return next(
       new GeneralError(
-        `${Messages.SOMETHING_WENT_WRONG} while deleting Category`,
-        undefined,
+        `${Messages.SOMETHING_WENT_WRONG} while deleting category`,
         StatusCodes.INTERNAL_SERVER_ERROR,
+        undefined,
         RESPONSE_STATUS.ERROR,
       ),
     );
