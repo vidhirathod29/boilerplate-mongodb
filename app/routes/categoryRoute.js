@@ -5,11 +5,11 @@ const controller = require('../controller/categoryController');
 
 router.post('/addCategory', auth.authentication, controller.addCategory);
 router.get('/viewCategory', auth.authentication, controller.viewCategory);
-router.put('/updateCategory', auth.authentication, controller.updateCategory);
+router.put('/updateCategory/:id', auth.authentication, controller.updateCategory);
 router.delete(
-  '/deleteCategory',
+  '/deleteCategory/:id',
   auth.authentication,
   controller.deleteCategory,
 );
-
+router.delete('/deleteMultipleCategory/:id',auth.authentication,controller.deleteMultipleCategory);
 module.exports = router;

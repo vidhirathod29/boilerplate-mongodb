@@ -115,7 +115,7 @@ const updateCategory = async (req, res, next) => {
         );
     }
 
-    const updatedCategory = await categoryModel.updateOne(req.params.id, {
+    const updatedCategory = await categoryModel.findByIdAndUpdate(req.params.id, {
       categoryName: req.body.categoryName,
     });
 
@@ -155,7 +155,7 @@ const updateCategory = async (req, res, next) => {
 const deleteCategory = async (req, res, next) => {
   try {
     const email = req.user.email;
-    const category = await categoryModel.deleteOne(req.params.id);
+    const category = await categoryModel.findByIdAndDelete(req.params.id);
     if (category) {
       res
         .status(StatusCodes.OK)
@@ -189,9 +189,104 @@ const deleteCategory = async (req, res, next) => {
   }
 };
 
+// const deleteMultipleCategory = async(req,res,next)=>{
+//   try {
+//     const ids = req.params.id;
+//     const idArray = ids.split(',');
+
+//     let deletedCount = 0;
+
+//     for (let i = 0; i < idArray.length; i++) {
+//       const id = idArray[i];
+//       await categoryModel.findByIdAndDelete(id);
+//       deletedCount++;
+//     }
+
+//     if (deletedCount > 0) {
+//       res
+//         .status(StatusCodes.OK)
+//         .json(
+//           new GeneralResponse(
+//             ` Category deleted ${Messages.SUCCESS}`,
+//             undefined,
+//             undefined,
+//             RESPONSE_STATUS.SUCCESS,
+//           ),
+//         );
+//     } else {
+//       next(
+//         new GeneralError(
+//           `Category id ${Messages.NOT_FOUND}`,
+//           StatusCodes.NOT_FOUND,
+//           undefined,
+//           RESPONSE_STATUS.ERROR,
+//         ),
+//       );
+//     }
+//   } catch (error) {
+//     console.log('error---',error)
+//     return next(
+//       new GeneralError(
+//         `${Messages.SOMETHING_WENT_WRONG} while deleting multiple categories`,
+//         StatusCodes.INTERNAL_SERVER_ERROR,
+//         undefined,
+//         RESPONSE_STATUS.ERROR,
+//       ),
+//     );
+//   }
+// };
+
+const deleteMultipleCategory = async (req, res, next) => {
+  try {
+    const ids = req.params.id;
+    const idArray = ids.split(',');
+
+    let deletedCount = 0;
+
+    for (let i = 0; i < idArray.length; i++) {
+      const id = idArray[i];
+      await categoryModel.findByIdAndDelete(id);
+      deletedCount++;
+    }
+
+    if (deletedCount > 0) {
+      res
+        .status(StatusCodes.OK)
+        .json(
+          new GeneralResponse(
+            ` Category deleted ${Messages.SUCCESS}`,
+            undefined,
+            undefined,
+            RESPONSE_STATUS.SUCCESS,
+          ),
+        );
+    } else {
+      next(
+        new GeneralError(
+          `Category id ${Messages.NOT_FOUND}`,
+          StatusCodes.NOT_FOUND,
+          undefined,
+          RESPONSE_STATUS.ERROR,
+        ),
+      );
+    }
+  } catch (error) {
+    console.log('error---',error)
+    return next(
+      new GeneralError(
+        `${Messages.SOMETHING_WENT_WRONG} while deleting multiple categories`,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        undefined,
+        RESPONSE_STATUS.ERROR,
+      ),
+    );
+  }
+}; 
+
 module.exports = {
   addCategory,
   viewCategory,
   updateCategory,
   deleteCategory,
+  deleteMultipleCategory
 };

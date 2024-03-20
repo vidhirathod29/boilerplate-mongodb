@@ -4,6 +4,7 @@ const logger = require('../logger/logger');
 const { GeneralResponse } = require('../utils/response');
 const StatusCodes = require('../services/Http-Status');
 const { RESPONSE_STATUS } = require('../utils/enum');
+const { Messages } = require('../utils/messages');
 
 const generateToken = (req, res) => {
   const token = jwt.sign(
@@ -39,7 +40,7 @@ const authentication = (req, res, next) => {
   } else {
     next(
       new GeneralResponse(
-        'Something went wrong',
+        `Token ${Messages.NOT_FOUND}`,
         undefined,
         StatusCodes.NOT_FOUND,
         RESPONSE_STATUS.ERROR,
