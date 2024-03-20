@@ -115,9 +115,12 @@ const updateCategory = async (req, res, next) => {
         );
     }
 
-    const updatedCategory = await categoryModel.findByIdAndUpdate(req.params.id, {
-      categoryName: req.body.categoryName,
-    });
+    const updatedCategory = await categoryModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        categoryName: req.body.categoryName,
+      },
+    );
 
     if (updatedCategory) {
       res
@@ -189,53 +192,6 @@ const deleteCategory = async (req, res, next) => {
   }
 };
 
-// const deleteMultipleCategory = async(req,res,next)=>{
-//   try {
-//     const ids = req.params.id;
-//     const idArray = ids.split(',');
-
-//     let deletedCount = 0;
-
-//     for (let i = 0; i < idArray.length; i++) {
-//       const id = idArray[i];
-//       await categoryModel.findByIdAndDelete(id);
-//       deletedCount++;
-//     }
-
-//     if (deletedCount > 0) {
-//       res
-//         .status(StatusCodes.OK)
-//         .json(
-//           new GeneralResponse(
-//             ` Category deleted ${Messages.SUCCESS}`,
-//             undefined,
-//             undefined,
-//             RESPONSE_STATUS.SUCCESS,
-//           ),
-//         );
-//     } else {
-//       next(
-//         new GeneralError(
-//           `Category id ${Messages.NOT_FOUND}`,
-//           StatusCodes.NOT_FOUND,
-//           undefined,
-//           RESPONSE_STATUS.ERROR,
-//         ),
-//       );
-//     }
-//   } catch (error) {
-//     console.log('error---',error)
-//     return next(
-//       new GeneralError(
-//         `${Messages.SOMETHING_WENT_WRONG} while deleting multiple categories`,
-//         StatusCodes.INTERNAL_SERVER_ERROR,
-//         undefined,
-//         RESPONSE_STATUS.ERROR,
-//       ),
-//     );
-//   }
-// };
-
 const deleteMultipleCategory = async (req, res, next) => {
   try {
     const ids = req.params.id;
@@ -271,7 +227,6 @@ const deleteMultipleCategory = async (req, res, next) => {
       );
     }
   } catch (error) {
-    console.log('error---',error)
     return next(
       new GeneralError(
         `${Messages.SOMETHING_WENT_WRONG} while deleting multiple categories`,
@@ -281,12 +236,12 @@ const deleteMultipleCategory = async (req, res, next) => {
       ),
     );
   }
-}; 
+};
 
 module.exports = {
   addCategory,
   viewCategory,
   updateCategory,
   deleteCategory,
-  deleteMultipleCategory
+  deleteMultipleCategory,
 };
