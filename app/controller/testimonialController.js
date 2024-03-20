@@ -8,11 +8,9 @@ const validate = require('../validation/testimonialValidation');
 
 const addTestimonial = async (req, res, next) => {
   try {
-    const email = req.user.email;
-
     const { testimonialName, designation, testimonialDescription } = req.body;
 
-    const { error } = await validate.addTestimonialValidation(req.body);
+    const { error } = validate.addTestimonialValidation(req.body);
     if (error)
       return res
         .status(400)
@@ -39,7 +37,7 @@ const addTestimonial = async (req, res, next) => {
         .status(StatusCodes.OK)
         .json(
           new GeneralResponse(
-            `Testimonial added ${Messages.SUCCESS}`,
+            `Testimonial ${Messages.SUCCESS}`,
             undefined,
             undefined,
             RESPONSE_STATUS.SUCCESS,
@@ -105,8 +103,6 @@ const viewTestimonial = async (req, res, next) => {
 
 const updateTestimonial = async (req, res, next) => {
   try {
-    const email = req.user.email;
-
     const { testimonialName, designation, testimonialDescription } = req.body;
 
     const { error } = await validate.updateTestimonialValidation(req.body);
@@ -166,7 +162,6 @@ const updateTestimonial = async (req, res, next) => {
 
 const deleteTestimonial = async (req, res, next) => {
   try {
-    const email = req.user.email;
     const deleteTestimonial = await testimonialModel.findByIdAndDelete(
       req.params.id,
     );
