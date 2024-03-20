@@ -8,8 +8,7 @@ const validate = require('../validation/contactValidation');
 
 const addContact = async (req, res, next) => {
   try {
-    const contactEmail = req.user.email;
-    const { error } = await validate.addContactValidation(req.body);
+    const { error } = validate.addContactValidation(req.body);
     if (error)
       return res
         .status(400)
@@ -66,7 +65,6 @@ const addContact = async (req, res, next) => {
 
 const viewContact = async (req, res, next) => {
   try {
-    const contactEmail = req.user.email;
     const contact = await contactModel.find();
     if (contact) {
       res
@@ -103,8 +101,7 @@ const viewContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const contactEmail = req.user.email;
-    const { error } = await validate.updateContactValidation(req.body);
+    const { error } = validate.updateContactValidation(req.body);
     if (error)
       return res
         .status(400)
@@ -160,7 +157,6 @@ const updateContact = async (req, res, next) => {
 
 const deleteContact = async (req, res, next) => {
   try {
-    const contactEmail = req.user.email;
     const deleteContact = await contactModel.findByIdAndDelete(req.params.id);
     if (deleteContact) {
       res
