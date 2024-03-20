@@ -8,8 +8,6 @@ const validate = require('../validation/portfolioValidation');
 
 const addPortfolio = async (req, res, next) => {
   try {
-    const email = req.user.email;
-
     const {
       projectCategory,
       projectName,
@@ -18,7 +16,7 @@ const addPortfolio = async (req, res, next) => {
       projectDescription,
     } = req.body;
 
-    const { error } = await validate.addPortfolioValidation(req.body);
+    const { error } = validate.addPortfolioValidation(req.body);
     if (error)
       return res
         .status(400)
@@ -132,7 +130,6 @@ const viewPortfolio = async (req, res, next) => {
 };
 const updatePortfolio = async (req, res, next) => {
   try {
-    const email = req.user.email;
     const {
       projectCategory,
       projectName,
@@ -202,7 +199,6 @@ const updatePortfolio = async (req, res, next) => {
 };
 const deletePortfolio = async (req, res, next) => {
   try {
-    const email = req.user.email;
     const deletePortfolio = await portfolioModel.findByIdAndDelete(
       req.params.id,
     );
