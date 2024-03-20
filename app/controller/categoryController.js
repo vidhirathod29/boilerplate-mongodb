@@ -7,10 +7,8 @@ const { RESPONSE_STATUS } = require('../utils/enum');
 const validate = require('../validation/categoryValidation');
 const addCategory = async (req, res, next) => {
   try {
-    const email = req.user.email;
-
-    const { error } = await validate.addCategoryValidation(req.body);
-
+    const { error } = validate.addCategoryValidation(req.body);
+    const { categoryName } = req.body;
     if (error)
       return res
         .status(400)
@@ -23,7 +21,7 @@ const addCategory = async (req, res, next) => {
           ),
         );
     const newCategory = new categoryModel({
-      categoryName: req.body.categoryName,
+      categoryName,
     });
 
     const category = await newCategory.save();
@@ -100,8 +98,8 @@ const viewCategory = async (req, res, next) => {
 
 const updateCategory = async (req, res, next) => {
   try {
-    const email = req.user.email;
-    const { error } = await validate.updateCategoryValidation(req.body);
+    const { categoryName } = req.body;
+    const { error } = validate.updateCategoryValidation(req.body);
     if (error) {
       return res
         .status(400)
@@ -118,7 +116,7 @@ const updateCategory = async (req, res, next) => {
     const updatedCategory = await categoryModel.findByIdAndUpdate(
       req.params.id,
       {
-        categoryName: req.body.categoryName,
+        categoryName,
       },
     );
 
@@ -157,7 +155,6 @@ const updateCategory = async (req, res, next) => {
 
 const deleteCategory = async (req, res, next) => {
   try {
-    const email = req.user.email;
     const category = await categoryModel.findByIdAndDelete(req.params.id);
     if (category) {
       res
