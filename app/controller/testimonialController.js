@@ -105,7 +105,7 @@ const updateTestimonial = async (req, res, next) => {
   try {
     const { testimonialName, designation, testimonialDescription } = req.body;
 
-    const { error } = await validate.updateTestimonialValidation(req.body);
+    const { error } = validate.updateTestimonialValidation(req.body);
     if (error)
       return res
         .status(400)
